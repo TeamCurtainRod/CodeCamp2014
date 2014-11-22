@@ -97,10 +97,6 @@ class Display(BaseDisplay):
         # Check out http://www.colorpicker.com/ if you want to try out
         # colors and find their RGB values.
         self.player_color     = (0, 255, 0)
-        self.player1r_image     = pygame.image.load("Player1right.png")
-        self.player1l_image     = pygame.image.load("Player1left.png")
-        self.player1d_image     = pygame.image.load("Player1down.png")
-        self.player1u_image     = pygame.image.load("Player1up.png")
         #self.player_image     = pygame.image.load("han.png")
         self.opponent_color   = (255, 0, 0)
         #self.missile_color    = (0, 255, 255)")")
@@ -111,7 +107,8 @@ class Display(BaseDisplay):
         self.missileu_image    = pygame.image.load("display/missileup.png")
         #self.npc_color        = (255, 255, 0)
         self.npc_image        =  pygame.image.load("display/npc.png")        
-        self.wall_color       = (255, 255, 255)
+       # self.wall_color       = (255, 255, 255)
+        self.wall_image      = pygame.image.load("display/wall.png")
         self.text_color       = (255, 255, 255)
         self.background_color = (0, 0, 0)
         return
@@ -208,7 +205,8 @@ class Display(BaseDisplay):
         Draws walls.
         """
         rect = self.obj_to_rect(obj)
-        pygame.draw.rect(surface, self.wall_color, rect)
+        #pygame.draw.rect(surface, self.wall_color, rect)
+        surface.blit(self.wall_image, (obj.get_px(), obj.get_py()))
         return
         
     def paint_npc(self, surface, engine, control, obj):
@@ -246,17 +244,7 @@ class Display(BaseDisplay):
         Draws living players.
         My player is my opponent are in different colors
         """
-        obj.get_dx()
-        obj.get_dy()
-        if obj.get_oid() == engine.get_player_oid():
-            if obj.is_alive() and obj.dx>0:
-                surface.blit(self.player1r_image, (obj.get_px(), obj.get_py()))
-            if obj.is_alive() and obj.dx<0:
-                surface.blit(self.player1l_image, (obj.get_px(), obj.get_py()))
-            if obj.is_alive() and obj.dy>0:
-                surface.blit(self.player1d_image, (obj.get_px(), obj.get_py()))
-            if obj.is_alive() and obj.dy<0:
-                surface.blit(self.player1u_image, (obj.get_px(), obj.get_py()))
+        if obj.is_alive():
             #surface.blit(self.player_image, (obj.get_px(), obj.get_py()))
             rect = self.obj_to_rect(obj)
             if obj.get_oid() == engine.get_player_oid():
