@@ -90,7 +90,7 @@ class Display(BaseDisplay):
         # There are other fonts available, but they are not
         # the same on every computer.  You can read more about
         # fonts at http://www.pygame.org/docs/ref/font.html
-        self.font_size = 29
+        self.font_size = 12
         self.font = pygame.font.SysFont("Courier New",self.font_size)
 
         # Colors are specified as a triple of integers from 0 to 255.
@@ -106,6 +106,14 @@ class Display(BaseDisplay):
         self.missilel_image    = pygame.image.load("display/bulletleft.png")
         self.missiled_image    = pygame.image.load("display/bulletdown.png")
         self.missileu_image    = pygame.image.load("display/bulletup.png")
+        self.player1r_image    = pygame.image.load("display/player1right.png")
+        self.player1l_image    = pygame.image.load("display/player1left.png")
+        self.player1d_image    = pygame.image.load("display/player1down.png")
+        self.player1u_image    = pygame.image.load("display/player1up.png")
+        self.player2r_image    = pygame.image.load("display/player2right.png")
+        self.player2l_image    = pygame.image.load("display/player2left.png")
+        self.player2d_image    = pygame.image.load("display/player2down.png")
+        self.player2u_image    = pygame.image.load("display/player2up.png")
         #self.npc_color        = (255, 255, 0)
         self.wall_image       = pygame.image.load("display/wall.png")
         self.npc_image        =  pygame.image.load("display/npc.png")
@@ -114,6 +122,7 @@ class Display(BaseDisplay):
         #self.wall_color       = (255, 255, 255)
         self.text_color       = (255, 255, 255)
         self.background_color = (0, 0, 0)
+        self.background_image = pygame.image.load("display/background.png")
         return
 
     def paint_pregame(self, surface, control):
@@ -156,9 +165,9 @@ class Display(BaseDisplay):
         Draws the display after the game starts.
         """
         # background
-        rect = pygame.Rect(0, 0, self.width, self.height)
-        surface.fill(self.background_color, rect)
-            
+        #rect = pygame.Rect(0, 0, self.width, self.height)
+        #surface.fill(self.background_color, rect)
+        surface.blit(self.background_image, (0, 0))   
         # draw each object
         objs = engine.get_objects()
         for key in objs:
@@ -250,32 +259,37 @@ class Display(BaseDisplay):
         Draws living players.
         My player is my opponent are in different colors
         """
-        obj.get_dx()
-        obj.get_dy()
+        dx = obj.get_dx()
+        dy = obj.get_dy()
         if obj.get_oid() == engine.get_player_oid():
-            if obj.is_alive() and obj.dx>0:
-                    surface.blit(self.player1r_image, (obj.get_px(), obj.get_py()))
-            if obj.is_alive() and obj.dx<0:
-                    surface.blit(self.player1l_image, (obj.get_px(), obj.get_py()))
-            if obj.is_alive() and obj.dy>0:
-                     surface.blit(self.player1d_image, (obj.get_px(), obj.get_py()))
-            if obj.is_alive() and obj.dy<0:
-                    surface.blit(self.player1u_image, (obj.get_px(), obj.get_py()))
-            if obj.get_oid() == engine.get_player_oid():
-                   color = self.player_color
+            if obj.is_alive() and dx>0.1:
+                surface.blit(self.player1r_image, (obj.get_px(), obj.get_py()))
+            elif obj.is_alive() and dx<-0.1:
+                surface.blit(self.player1l_image, (obj.get_px(), obj.get_py()))
+            elif obj.is_alive() and dy>0.1:
+                surface.blit(self.player1d_image, (obj.get_px(), obj.get_py()))
             else:
-                color = self.opponent_color
-                pygame.draw.rect(surface, color, rect)
+                surface.blit(self.player1u_image, (obj.get_px(), obj.get_py()))
+        else:
+            if obj.is_alive() and dx>0.1:
+                surface.blit(self.player2r_image, (obj.get_px(), obj.get_py()))
+            elif obj.is_alive() and dx<-0.1:
+                surface.blit(self.player2l_image, (obj.get_px(), obj.get_py()))
+            elif obj.is_alive() and dy>0.1:
+                surface.blit(self.player2d_image, (obj.get_px(), obj.get_py()))
+            else:
+                surface.blit(self.player2u_image, (obj.get_px(), obj.get_py()))
+            
         return
-       # if obj.is_alive():
-            #surface.blit(self.player_image, (obj.get_px(), obj.get_py()))
-         #   rect = self.obj_to_rect(obj)
-         #   if obj.get_oid() == engine.get_player_oid():
-        #        color = self.player_color
-        #    else:
-         #       color = self.opponent_color
-         #   pygame.draw.rect(surface, color, rect)
-        #return
+# if obj.is_alive():
+#surface.blit(self.player_image, (obj.get_px(), obj.get_py()))
+# rect = self.obj_to_rect(obj)
+# if obj.get_oid() == engine.get_player_oid():
+# color = self.player_color
+# else:
+# color = self.opponent_color
+# pygame.draw.rect(surface, color, rect)
+#return
 
     def paint_game_status(self, surface, engine, control):
         """
@@ -314,6 +328,7 @@ class Display(BaseDisplay):
                 position_y = self.height - STATUS_BAR_HEIGHT + 6 * self.font_size / 2
                 self.draw_text_left(surface, s, self.text_color, position_x, position_y, self.font)
         return
+
 
 
 
