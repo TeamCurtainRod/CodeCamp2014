@@ -250,15 +250,32 @@ class Display(BaseDisplay):
         Draws living players.
         My player is my opponent are in different colors
         """
-        if obj.is_alive():
-            #surface.blit(self.player_image, (obj.get_px(), obj.get_py()))
-            rect = self.obj_to_rect(obj)
+        obj.get_dx()
+        obj.get_dy()
+        if obj.get_oid() == engine.get_player_oid():
+            if obj.is_alive() and obj.dx>0:
+                    surface.blit(self.player1r_image, (obj.get_px(), obj.get_py()))
+            if obj.is_alive() and obj.dx<0:
+                    surface.blit(self.player1l_image, (obj.get_px(), obj.get_py()))
+            if obj.is_alive() and obj.dy>0:
+                     surface.blit(self.player1d_image, (obj.get_px(), obj.get_py()))
+            if obj.is_alive() and obj.dy<0:
+                    surface.blit(self.player1u_image, (obj.get_px(), obj.get_py()))
             if obj.get_oid() == engine.get_player_oid():
-                color = self.player_color
+                   color = self.player_color
             else:
                 color = self.opponent_color
-            pygame.draw.rect(surface, color, rect)
+                pygame.draw.rect(surface, color, rect)
         return
+       # if obj.is_alive():
+            #surface.blit(self.player_image, (obj.get_px(), obj.get_py()))
+         #   rect = self.obj_to_rect(obj)
+         #   if obj.get_oid() == engine.get_player_oid():
+        #        color = self.player_color
+        #    else:
+         #       color = self.opponent_color
+         #   pygame.draw.rect(surface, color, rect)
+        #return
 
     def paint_game_status(self, surface, engine, control):
         """
