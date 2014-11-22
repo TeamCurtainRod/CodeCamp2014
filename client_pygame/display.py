@@ -99,7 +99,8 @@ class Display(BaseDisplay):
         self.player_color     = (0, 255, 0)
         #self.player_image     = pygame.image.load("han.png")
         self.opponent_color   = (255, 0, 0)
-        #self.missile_color    = (0, 255, 255)
+        #self.missile_color    = (0, 255, 255)")")
+        self.title_image = pygame.image.load("display/Title.png")
         self.missiler_image    = pygame.image.load("display/bulletright.png")
         self.missilel_image    = pygame.image.load("display/bulletleft.png")
         self.missiled_image    = pygame.image.load("display/missiledown.png")
@@ -116,17 +117,18 @@ class Display(BaseDisplay):
         Draws the display before the user selects the game type.
         """
         # background
-        rect = pygame.Rect(0, 0, self.width, self.height)
-        surface.fill(self.background_color, rect)
+        surface.blit(self.title_image,(0,0))
+        #rect = pygame.Rect(0, 0, self.width, self.height)
+        #surface.fill(self.background_color, rect)
         # text message in center of screen
-        s = "Press 'd' for dual player, 's' for single player,"
-        self.draw_text_center(surface, s, self.text_color,
-                              self.width/2, self.height/2,
-                              self.font)
-        s = "'t' for tournament, 'esc' to quit."
-        self.draw_text_center(surface, s, self.text_color,
-                              self.width/2, self.height/2 + 3*self.font_size/2,
-                              self.font)
+        #s = "Press 'd' for dual player, 's' for single player,"
+        #self.draw_text_center(surface, s, self.text_color,
+                  #            self.width/2, self.height/2,
+              #                self.font)
+       # s = "'t' for tournament, 'esc' to quit."
+        #self.draw_text_center(surface, s, self.text_color,
+          #                    self.width/2, self.height/2 + 3*self.font_size/2,
+           #                   self.font)
         return
         
     def paint_waiting_for_game(self, surface, engine, control):
