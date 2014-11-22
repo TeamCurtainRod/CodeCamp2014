@@ -143,7 +143,22 @@ class Control(BaseControl):
                 
         if pygame.K_SPACE in newkeys:
             engine.fire_missile()
+            
+            oid = engine.get_player_oid()
+            player = engine.get_object(oid)
+            if player.get_experience() >= 30:
+                engine.set_missile_range_high()
+            elif player.get_experience() >= 9:
+                engine.set_missile_range_medium()
+            else:
+                engine.set_missile_range_short()
 
+            if player.get_experience() >= 36:
+                engine.set_missile_power_high()
+            elif player.get_experience() >= 15:
+                engine.set_missile_power_medium()
+            else:
+                engine.set_missile_power_low()
         if pygame.K_i in newkeys:
             self.show_info = not self.show_info
 
