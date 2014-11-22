@@ -4,6 +4,7 @@
 #
 
 import pygame
+import random
 from config import *
 from common.event import *
 from client.base_display import BaseDisplay
@@ -89,7 +90,7 @@ class Display(BaseDisplay):
         # There are other fonts available, but they are not
         # the same on every computer.  You can read more about
         # fonts at http://www.pygame.org/docs/ref/font.html
-        self.font_size = 12
+        self.font_size = 29
         self.font = pygame.font.SysFont("Courier New",self.font_size)
 
         # Colors are specified as a triple of integers from 0 to 255.
@@ -99,16 +100,18 @@ class Display(BaseDisplay):
         self.player_color     = (0, 255, 0)
         #self.player_image     = pygame.image.load("han.png")
         self.opponent_color   = (255, 0, 0)
-        #self.missile_color    = (0, 255, 255)")")
-        self.title_image = pygame.image.load("display/Title.png")
+        #self.missile_color    = (0, 255, 255)
+        self.title_image     = pygame.image.load("display/Title.png")
         self.missiler_image    = pygame.image.load("display/bulletright.png")
         self.missilel_image    = pygame.image.load("display/bulletleft.png")
-        self.missiled_image    = pygame.image.load("display/missiledown.png")
-        self.missileu_image    = pygame.image.load("display/missileup.png")
+        self.missiled_image    = pygame.image.load("display/bulletdown.png")
+        self.missileu_image    = pygame.image.load("display/bulletup.png")
         #self.npc_color        = (255, 255, 0)
-        self.npc_image        =  pygame.image.load("display/npc.png")        
-       # self.wall_color       = (255, 255, 255)
-        self.wall_image      = pygame.image.load("display/wall.png")
+        self.wall_image       = pygame.image.load("display/wall.png")
+        self.npc_image        =  pygame.image.load("display/npc.png")
+        self.npc2_image       = pygame.image.load("display/npc2.png")
+        self.npc3_image       = pygame.image.load("display/npc3.png")
+        #self.wall_color       = (255, 255, 255)
         self.text_color       = (255, 255, 255)
         self.background_color = (0, 0, 0)
         return
@@ -117,19 +120,19 @@ class Display(BaseDisplay):
         """
         Draws the display before the user selects the game type.
         """
-        # background
         surface.blit(self.title_image,(0,0))
+        # background
         #rect = pygame.Rect(0, 0, self.width, self.height)
         #surface.fill(self.background_color, rect)
         # text message in center of screen
-        #s = "Press 'd' for dual player, 's' for single player,"
+       #s = "Press 'd' for dual player, 's' for single player,"
         #self.draw_text_center(surface, s, self.text_color,
-                  #            self.width/2, self.height/2,
-              #                self.font)
-       # s = "'t' for tournament, 'esc' to quit."
-        #self.draw_text_center(surface, s, self.text_color,
-          #                    self.width/2, self.height/2 + 3*self.font_size/2,
+           #                   self.width/2, self.height/2,
            #                   self.font)
+       # s = "'t' for tournament, 'esc' to quit."
+      #  self.draw_text_center(surface, s, self.text_color,
+                    #          self.width/2, self.height/2 + 3*self.font_size/2,
+                    #          self.font)
         return
         
     def paint_waiting_for_game(self, surface, engine, control):
@@ -205,7 +208,6 @@ class Display(BaseDisplay):
         Draws walls.
         """
         rect = self.obj_to_rect(obj)
-        #pygame.draw.rect(surface, self.wall_color, rect)
         surface.blit(self.wall_image, (obj.get_px(), obj.get_py()))
         return
         
@@ -214,8 +216,12 @@ class Display(BaseDisplay):
         Draws living NPCs.
         """
         if obj.is_alive():
-            surface.blit(self.npc_image, (obj.get_px(), obj.get_py()))
-            #color = self.npc_color
+            if obj.get_oid() % 3 == 0:
+                surface.blit(self.npc_image, (obj.get_px(), obj.get_py()))
+            elif obj.get_oid() %  3 == 1:
+                surface.blit(self.npc2_image, (obj.get_px(), obj.get_py()))
+            elif obj.get_oid() % 3 == 2:
+                surface.blit(self.npc3_image, (obj.get_px(), obj.get_py()))            #color = self.npc_color
             #rect = self.obj_to_rect(obj)
             #pygame.draw.rect(surface, color, rect)
         return
@@ -226,13 +232,13 @@ class Display(BaseDisplay):
         """
         obj.get_dx()
         obj.get_dy()
-        if obj.is_alive() and obj.dx>0:
+        if obj.is_alive() and obj.dx>0.1:
             surface.blit(self.missiler_image, (obj.get_px(), obj.get_py()))
-        if obj.is_alive() and obj.dx<0:
+        if obj.is_alive() and obj.dx<-.1:
             surface.blit(self.missilel_image, (obj.get_px(), obj.get_py()))
-        if obj.is_alive() and obj.dy>0:
+        if obj.is_alive() and obj.dy>0.1:
             surface.blit(self.missiled_image, (obj.get_px(), obj.get_py()))
-        if obj.is_alive() and obj.dy<0:
+        if obj.is_alive() and obj.dy<-.10:
             surface.blit(self.missileu_image, (obj.get_px(), obj.get_py()))
             #color = self.missile_color
             #rect = self.obj_to_rect(obj)
@@ -291,4 +297,6 @@ class Display(BaseDisplay):
                 position_y = self.height - STATUS_BAR_HEIGHT + 6 * self.font_size / 2
                 self.draw_text_left(surface, s, self.text_color, position_x, position_y, self.font)
         return
+
+
 
